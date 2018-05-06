@@ -1,0 +1,29 @@
+{
+  "name": "node-chatpotv7-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "jaydee",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/glob": "^5.0.35",
+    "@types/koa-router": "^7.0.27",
+    "@types/lodash": "^4.14.107",
+    "@types/node": "^9.6.6",
+    "gulp": "^3.9.1",
+    "gulp-tsc": "^1.3.2",
+    "run-sequence": "^2.2.1"
+  },
+  "dependencies": {
+    "glob": "^7.1.2",
+    "koa": "^2.5.0",
+    "koa-router": "^7.4.0",
+    "lodash": "^4.17.5",
+    "mysql": "^2.15.0",
+    "reflect-metadata": "^0.1.12",
+    "typedi": "^0.7.2"
+  }
+}

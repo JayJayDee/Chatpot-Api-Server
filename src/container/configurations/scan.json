@@ -1,0 +1,7 @@
+{
+  "scan_patterns": [
+    "/**/*.js"
+  ],
+  "app_root": "../app",
+  "app_entrypoint": "../app/app"
+}
