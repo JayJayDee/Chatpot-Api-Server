@@ -14,6 +14,10 @@ export class Mysql implements DbDefinitions.RDB {
   @Inject(LoggerDefinitions.LoggerInjectable)
   private log: LoggerDefinitions.Logger;
 
+  constructor() {
+    
+  }
+
   public job(operation): Promise<any> {
     return null;
   }
