@@ -2,7 +2,7 @@
 import * as ConfigDefinitions from './config.definitions';
 import * as ContainerDefinitions from '../../container/container-definitions';
 
-export class LocalConfigFactory implements ContainerDefinitions.Factory {
+export class FileConfigFactory implements ContainerDefinitions.Factory {
   public produce(): ConfigDefinitions.Config {
     let config: ConfigDefinitions.Config = {
       http: {

@@ -10,5 +10,6 @@ export interface DbConnectionConfig {
 }
 
 export interface DbConfig {
-  connection: DbConnectionConfig; 
+  connection: DbConnectionConfig;
+  maxPoolSize: number;
 }

@@ -1,5 +1,6 @@
 
 import { Service, Inject } from 'typedi';
+import * as mysql from 'mysql';
 
 import * as DbDefinitions from './db.definitions';
 import * as ConfigDefinitions from '../configs/config.definitions';

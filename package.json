@@ -12,6 +12,7 @@
     "@types/glob": "^5.0.35",
     "@types/koa-router": "^7.0.27",
     "@types/lodash": "^4.14.107",
+    "@types/mysql": "^2.15.4",
     "@types/node": "^9.6.6",
     "gulp": "^3.9.1",
     "gulp-tsc": "^1.3.2",
