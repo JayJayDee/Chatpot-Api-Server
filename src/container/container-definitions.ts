@@ -7,8 +7,3 @@ export interface KoaAppRunnable {
   koaInstance(): Koa;
 }
 export const KoaAppRunnerInjectable: Token<KoaAppRunnable> = new Token<KoaAppRunnable>();
-
-export interface Factory {
-  produce(): any;
-}
-export const FactoryInjectable: Token<Factory> = new Token<Factory>();

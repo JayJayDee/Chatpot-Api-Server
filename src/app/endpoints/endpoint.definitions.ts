@@ -14,7 +14,6 @@ export interface Endpoint {
 }
 export const EndpointInjectable: Token<Endpoint> = new Token<Endpoint>();
 
-
 export function RestEndpoint(url: string, method?: HttpMethod) {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
     if (!method) {
@@ -50,7 +49,5 @@ export function RestEndpoints<T extends {new(...args:any[]): {}}> (OriginalClass
   }
 }
 
-export interface EndpointProducer {
-  
-}
+export interface EndpointProducer {}
 export const EndpointProducerInjectable: Token<EndpointProducer> = new Token<EndpointProducer>();

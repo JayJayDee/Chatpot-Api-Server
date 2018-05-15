@@ -15,6 +15,8 @@ export class Mysql implements DbDefinitions.RDB {
   @Inject(LoggerDefinitions.LoggerInjectable)
   private log: LoggerDefinitions.Logger;
 
+  private pool: mysql.PoolConnection;
+
   constructor() {
     
   }

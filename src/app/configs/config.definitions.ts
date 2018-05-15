@@ -23,3 +23,6 @@ export interface Config {
   env: Env;
 }
 export const ConfigInjectable: Token<Config> = new Token<Config>();
+export interface ConfigFactory {
+  produce(): Config;
+}
