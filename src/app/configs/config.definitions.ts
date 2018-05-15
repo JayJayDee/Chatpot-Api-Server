@@ -26,3 +26,22 @@ export const ConfigInjectable: Token<Config> = new Token<Config>();
 export interface ConfigFactory {
   produce(): Config;
 }
+
+export interface ConfigFile {
+  HTTP_PORT: number;
+  HTTP_CORS_ENABLED: boolean;
+  HTTP_CORS_ORIGIN: string;
+  HTTP_CORS_ALLOW_METHODS: Array<string>;
+
+  DB_CONNECTION_HOST: string;
+  DB_CONNECTION_PORT: number;
+  DB_CONNECTION_DB: string;
+  DB_CONNECTION_USER: string;
+  DB_CONNECTION_PASSWORD: string;
+  DB_MAX_POOL_SIZE: number;
+
+  LOG_LEVEL: string;
+
+  CACHE_ENABLED: boolean;
+  ENV: string;
+}
