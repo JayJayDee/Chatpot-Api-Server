@@ -11,9 +11,6 @@ import * as ContainerDefinitions from '../../container/container-definitions';
 export enum Env {
   LOCAL = 'LOCAL', STAGE = 'STAGE', PROD = 'PROD'
 }
-export interface ConfigSection {
-  name: string;
-}
 
 export interface Config {
   http: HttpConfigDefinitions.HttpConfig;
@@ -40,7 +37,7 @@ export interface ConfigFile {
   DB_CONNECTION_PASSWORD: string;
   DB_MAX_POOL_SIZE: number;
 
-  LOG_LEVEL: string;
+  LOG_LEVEL: LogConfigDefinitions.LogLevel;
 
   CACHE_ENABLED: boolean;
   ENV: string;

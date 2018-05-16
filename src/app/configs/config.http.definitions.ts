@@ -2,9 +2,9 @@
 import * as ConfigDefinitions from './config.definitions';
 
 export interface HttpCorsConfig {
-  enable: boolean;
+  enabled: boolean;
   origin?: string;
-  allowMethods?: string;
+  allowMethods?: Array<string>;
 }
 
 export interface HttpConfig {
