@@ -72,15 +72,17 @@ export class FileConfigFactory implements ConfigDefinitions.ConfigFactory {
     
     let mustHaveKeys: Array<string> = [
       'HTTP_PORT', 'HTTP_CORS_ENABLED', 'HTTP_CORS_ORIGIN', 'HTTP_CORS_ALLOW_METHODS',
-      'DB_CONNECTION_HOST', 'DB_CONNECTION_PORT', 'DB_CONNECTION_DB', 'DB_CONNECTION_USER', 'DB_CONNECTOIN_PASSWORD', 'DB_MAX_POOL_SIZE',
+      'DB_CONNECTION_HOST', 'DB_CONNECTION_PORT', 'DB_CONNECTION_DB', 'DB_CONNECTION_USER', 'DB_CONNECTION_PASSWORD', 'DB_MAX_POOL_SIZE',
       'LOG_LEVEL', 'CACHE_ENABLED', 'ENV'
     ];
     let invalidKey = null;
     let valid: boolean = _.chain(mustHaveKeys)
       .map((key) => {
-        if (configBody[key]) return true;
-        invalidKey = key;
-        return false;
+        if (configBody[key] === undefined) {
+          invalidKey = key;
+          return false;
+        }
+        return true;
       })
       .every(Boolean)
       .value();
