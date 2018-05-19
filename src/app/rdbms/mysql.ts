@@ -31,11 +31,11 @@ export class Mysql implements DbDefinitions.RDB {
     }, 1);
   }
 
-  public job(operation: (db: any) => Promise<any>): Promise<any> {
+  public job(operation: (connection: any) => Promise<any>): Promise<any> {
     return null;
   }
 
-  public transaction(operation: (db: any) => Promise<any>): Promise<any> {
+  public transaction(operation: (connection: any) => Promise<any>): Promise<any> {
     let connection: mysql.PoolConnection;
     return new Promise((resolve, reject) => {
       this.getConnectionFromPool()
@@ -71,7 +71,17 @@ export class Mysql implements DbDefinitions.RDB {
 
   public query(query: string, params?: Array<any>): Promise<any> {
     return new Promise((resolve, reject) => {
-      
+
+    });
+  }
+
+  public promisify(caller: Object, func: Function, params: Array<any>): Promise<any> {
+    return new Promise((resolve, reject) => {
+      params.push((err, resp) => {
+        if (err) return reject(err);
+        return resolve(resp);
+      });
+      func.apply(caller, params)
     });
   }
 

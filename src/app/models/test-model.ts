@@ -11,9 +11,7 @@ export class TestModel implements ModelDefinitions.TestModel {
 
   public async test(): Promise<any> {
     await this.db.transaction(async (con) => {
-      con.query('SELECT 1', (err, resp) => {
-        
-      });
+      await this.db.promisify(con, con.query, ['SELECT 1']);
     });
   }
 }
