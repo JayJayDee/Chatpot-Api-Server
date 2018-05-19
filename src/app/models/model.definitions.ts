@@ -3,7 +3,7 @@ import * as MemberTypes from '../common-types/member.types';
 import { Token } from 'typedi';
 
 export interface TestModel {
-  test(): string;
+  test(): Promise<any>;
 }
 export const TestModelInjectable: Token<TestModel> = new Token<TestModel>();
 

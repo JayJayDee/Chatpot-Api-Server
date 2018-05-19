@@ -6,6 +6,8 @@ import * as DbDefinitions from './db.definitions';
 import * as ConfigDefinitions from '../configs/config.definitions';
 import * as LoggerDefinitions from '../logger/logger.definitions';
 
+const TAG: string = '[MySQL Driver]';
+
 @Service(DbDefinitions.RDBInjectable)
 export class Mysql implements DbDefinitions.RDB {
 
@@ -29,15 +31,56 @@ export class Mysql implements DbDefinitions.RDB {
     }, 1);
   }
 
-  public job(operation): Promise<any> {
+  public job(operation: (db: any) => Promise<any>): Promise<any> {
     return null;
   }
 
-  public transaction(operation): Promise<any> {
-    return null;
+  public transaction(operation: (db: any) => Promise<any>): Promise<any> {
+    let connection: mysql.PoolConnection;
+    return new Promise((resolve, reject) => {
+      this.getConnectionFromPool()
+      .then((con: mysql.PoolConnection) => {
+        connection = con;
+        connection.beginTransaction((err: Error) => {
+          if (err) throw err;
+          operation(connection)
+          .then((resp: any) => {
+            connection.commit();
+            connection.release();
+            this.log.d(`${TAG} transaction committed : ${connection.threadId}`);
+            return resolve(resp);
+          })
+          .catch((err: Error) => {
+            connection.rollback();
+            connection.release();
+            this.log.d(`${TAG} transaction rolled back : ${connection.threadId}`);
+            return reject(err);
+          });
+        });
+      })
+      .catch((err: Error) => {
+        if (connection) {
+          this.log.d(`${TAG} transaction rolled back : ${connection.threadId}`);
+          connection.rollback();
+          connection.release();
+        }
+        return reject(err);
+      });
+    });
   }
 
-  public query(query: string, params?: any): Promise<any> {
-    return null;
+  public query(query: string, params?: Array<any>): Promise<any> {
+    return new Promise((resolve, reject) => {
+      
+    });
+  }
+
+  private getConnectionFromPool(): Promise<mysql.PoolConnection> {
+    return new Promise((resolve, reject) => {
+      this.pool.getConnection((err: Error, connection: mysql.PoolConnection) => {
+        if (err) return reject(err);
+        return resolve(connection);
+      });
+    });
   }
 }

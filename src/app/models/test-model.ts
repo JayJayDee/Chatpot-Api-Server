@@ -9,7 +9,11 @@ export class TestModel implements ModelDefinitions.TestModel {
   @Inject(DbDefinitions.RDBInjectable)
   private db: DbDefinitions.RDB;
 
-  public test(): string {
-    return 'test model test';
+  public async test(): Promise<any> {
+    await this.db.transaction(async (con) => {
+      con.query('SELECT 1', (err, resp) => {
+        
+      });
+    });
   }
 }
