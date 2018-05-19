@@ -15,10 +15,18 @@ export class Mysql implements DbDefinitions.RDB {
   @Inject(LoggerDefinitions.LoggerInjectable)
   private log: LoggerDefinitions.Logger;
 
-  private pool: mysql.PoolConnection;
+  private pool: mysql.Pool;
 
   constructor() {
-    
+    setTimeout(() => {
+      this.pool = mysql.createPool({
+        host: this.config.db.connection.host,
+        user: this.config.db.connection.user,
+        password: this.config.db.connection.password,
+        database: this.config.db.connection.database,
+        connectionLimit: this.config.db.maxPoolSize
+      });
+    }, 1);
   }
 
   public job(operation): Promise<any> {
