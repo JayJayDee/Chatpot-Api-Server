@@ -10,8 +10,10 @@ export class TestModel implements ModelDefinitions.TestModel {
   private db: DbDefinitions.RDB;
 
   public async test(): Promise<any> {
-    await this.db.transaction(async (con) => {
+    return await this.db.transaction(async (con) => {
       await this.db.promisify(con, con.query, ['SELECT 1']);
+      await this.db.promisify(con, con.query, ['SELECT 2']);
+      return 1;
     });
   }
 }

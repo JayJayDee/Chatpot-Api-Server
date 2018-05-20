@@ -22,7 +22,8 @@ export class AuthEndpoints implements EndpointDefinitions.EndpointProducer {
   @EndpointDefinitions.RestEndpoint('/auth/default', HttpMethod.POST)
   public async defaultAuth(ctx: IRouterContext, next: () => Promise<any>) {
 
-    await this.testModel.test();
+    let resp = await this.testModel.test();
+    console.log(resp); 
 
     ctx.sendApiSuccess({
       test: 'auth-default'
