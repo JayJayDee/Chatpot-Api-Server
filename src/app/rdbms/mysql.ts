@@ -3,6 +3,7 @@ import { Service, Inject } from 'typedi';
 import * as mysql from 'mysql';
 
 import * as DbDefinitions from './db.definitions';
+import { ExtendedMysqlConnection } from './mysql.definitions';
 import * as ConfigDefinitions from '../configs/config.definitions';
 import * as LoggerDefinitions from '../logger/logger.definitions';
 
@@ -36,10 +37,10 @@ export class Mysql implements DbDefinitions.RDB {
   }
 
   public transaction(operation: (connection: any) => Promise<any>): Promise<any> {
-    let connection: mysql.PoolConnection;
+    let connection: ExtendedMysqlConnection
     return new Promise((resolve, reject) => {
       this.getConnectionFromPool()
-      .then((con: mysql.PoolConnection) => {
+      .then((con: ExtendedMysqlConnection) => {
         connection = con;
         connection.beginTransaction((err: Error) => {
           if (err) throw err;
@@ -85,11 +86,27 @@ export class Mysql implements DbDefinitions.RDB {
     });
   }
 
-  private getConnectionFromPool(): Promise<mysql.PoolConnection> {
+  private getConnectionFromPool(): Promise<ExtendedMysqlConnection> {
     return new Promise((resolve, reject) => {
       this.pool.getConnection((err: Error, connection: mysql.PoolConnection) => {
         if (err) return reject(err);
-        return resolve(connection);
+
+        let extended: ExtendedMysqlConnection = connection as ExtendedMysqlConnection;
+        if (!extended.queryAsync) {
+          extended.queryAsync = function (query: string, params?: Array<any>) {
+            let self = this;
+            return new Promise((resolve, reject) => {
+              self.query(query, params, (err, resp) => {
+                if (err) {
+                  return reject(err);
+                }
+                return resolve(resp);                
+              });
+            });
+          }
+        }
+
+        return resolve(extended);
       });
     });
   }
