@@ -48,13 +48,13 @@ export class Mysql implements DbDefinitions.RDB {
           .then((resp: any) => {
             connection.commit();
             connection.release();
-            this.log.d(`${TAG} transaction committed : ${connection.threadId}`);
+            this.log.d(`${TAG} transaction committed : session_id = ${connection.threadId}`);
             return resolve(resp);
           })
           .catch((err: Error) => {
             connection.rollback();
             connection.release();
-            this.log.d(`${TAG} transaction rolled back : ${connection.threadId}`);
+            this.log.d(`${TAG} transaction rolled back : session_id = ${connection.threadId}`);
             return reject(err);
           });
         });
@@ -105,7 +105,6 @@ export class Mysql implements DbDefinitions.RDB {
             });
           }
         }
-
         return resolve(extended);
       });
     });
