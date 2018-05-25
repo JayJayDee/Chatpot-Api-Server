@@ -35,7 +35,9 @@ export class ExceptionMiddleware implements MiddlewareDefinitions.Middleware {
           }
         };
       } else {
-        throw err;   
+        console.error(err.message);
+        console.error(err.stack);
+        process.exit();
       }
     }
   }

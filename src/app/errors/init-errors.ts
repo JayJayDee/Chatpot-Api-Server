@@ -4,3 +4,9 @@ export class ConfigurationError extends Error {
     super(msg);
   }
 }
+
+export class MysqlConnectionError extends Error {
+  constructor(msg: string) {
+    super(msg);
+  }
+}

@@ -13,6 +13,7 @@ export class AuthModel implements ModelDefinitions.AuthModel {
 
   public async authenticate(payload: MemberTypes.Auth): Promise<MemberTypes.Member> {
     await this.db.job(async (db: any) => {
+      await db.query()
       return null;
     });
     return null;

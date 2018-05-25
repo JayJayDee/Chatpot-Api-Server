@@ -6,8 +6,9 @@ import * as DbDefinitions from './db.definitions';
 import { ExtendedMysqlConnection } from './mysql.definitions';
 import * as ConfigDefinitions from '../configs/config.definitions';
 import * as LoggerDefinitions from '../logger/logger.definitions';
+import * as InitErrors from '../errors/init-errors';
 
-const TAG: string = '[MySQL Driver]';
+const TAG: string = 'MySQL-driver';
 
 @Service(DbDefinitions.RDBInjectable)
 export class Mysql implements DbDefinitions.RDB {
@@ -29,6 +30,15 @@ export class Mysql implements DbDefinitions.RDB {
         database: this.config.db.connection.database,
         connectionLimit: this.config.db.maxPoolSize
       });
+
+      this.getConnectionFromPool()
+      .then((connection: ExtendedMysqlConnection) => {
+        connection.release();
+        this.log.d(`${TAG}: connection established`);
+      })
+      .catch((err) => {
+        throw new InitErrors.MysqlConnectionError(`Mysql connection fail : ${err.message}`);
+      });
     }, 1);
   }
 
@@ -48,20 +58,20 @@ export class Mysql implements DbDefinitions.RDB {
           .then((resp: any) => {
             connection.commit();
             connection.release();
-            this.log.d(`${TAG} transaction committed : session_id = ${connection.threadId}`);
+            this.log.d(`${TAG}: transaction committed : session_id = ${connection.threadId}`);
             return resolve(resp);
           })
           .catch((err: Error) => {
             connection.rollback();
             connection.release();
-            this.log.d(`${TAG} transaction rolled back : session_id = ${connection.threadId}`);
+            this.log.d(`${TAG}: transaction rolled back : session_id = ${connection.threadId}`);
             return reject(err);
           });
         });
       })
       .catch((err: Error) => {
         if (connection) {
-          this.log.d(`${TAG} transaction rolled back : ${connection.threadId}`);
+          this.log.d(`${TAG}: transaction rolled back : ${connection.threadId}`);
           connection.rollback();
           connection.release();
         }
@@ -73,16 +83,6 @@ export class Mysql implements DbDefinitions.RDB {
   public query(query: string, params?: Array<any>): Promise<any> {
     return new Promise((resolve, reject) => {
 
-    });
-  }
-
-  public promisify(caller: Object, func: Function, params: Array<any>): Promise<any> {
-    return new Promise((resolve, reject) => {
-      params.push((err, resp) => {
-        if (err) return reject(err);
-        return resolve(resp);
-      });
-      func.apply(caller, params)
     });
   }
 
