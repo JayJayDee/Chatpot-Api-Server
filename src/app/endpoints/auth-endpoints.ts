@@ -8,6 +8,7 @@ import * as LoggerDefinitions from '../logger/logger.definitions';
 import * as ModelDefinitions from '../models/model.definitions';
 
 import * as Errors from '../errors/default-errors';
+import * as MemberTypes from '../common-types/member.types';
 
 @Service({id: EndpointDefinitions.EndpointProducerInjectable, multiple: true})
 @EndpointDefinitions.RestEndpoints
@@ -18,6 +19,9 @@ export class AuthEndpoints implements EndpointDefinitions.EndpointProducer {
 
   @Inject(ModelDefinitions.TestModelInjectable)
   private testModel: ModelDefinitions.TestModel;
+
+  @Inject(ModelDefinitions.AuthModelInjectable)
+  private authModel: ModelDefinitions.AuthModel;
 
   @EndpointDefinitions.RestEndpoint('/auth/default', HttpMethod.POST)
   public async defaultAuth(ctx: IRouterContext, next: () => Promise<any>) {
@@ -32,8 +36,13 @@ export class AuthEndpoints implements EndpointDefinitions.EndpointProducer {
 
   @EndpointDefinitions.RestEndpoint('/auth/email', HttpMethod.POST)
   public async emailAuth(ctx: IRouterContext, next: () => Promise<any>) {
-    ctx.sendApiSuccess({
-      test: 'auth-email'
+
+    let resp = await this.authModel.authenticate({
+      type: MemberTypes.AuthType.EMAIL,
+      id: 'test',
+      password: 'asdf'
     });
+
+    ctx.sendApiSuccess(resp);
   }
 }

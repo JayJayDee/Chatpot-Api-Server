@@ -12,10 +12,8 @@ export class AuthModel implements ModelDefinitions.AuthModel {
   private db: DbDefinitions.RDB;
 
   public async authenticate(payload: MemberTypes.Auth): Promise<MemberTypes.Member> {
-    await this.db.job(async (db: any) => {
-      await db.query()
-      return null;
+    return await this.db.job(async (connection: any) => {
+      return await connection.queryAsync('SELECT 1');
     });
-    return null;
   }
 }

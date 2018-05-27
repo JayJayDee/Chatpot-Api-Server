@@ -43,7 +43,22 @@ export class Mysql implements DbDefinitions.RDB {
   }
 
   public job(operation: (connection: any) => Promise<any>): Promise<any> {
-    return null;
+    let connection: ExtendedMysqlConnection;
+    return new Promise((resolve, reject) => {
+      this.getConnectionFromPool()
+      .then((con: ExtendedMysqlConnection) => {
+        connection = con;
+        return operation(connection);
+      })
+      .then((resp: any) => {
+        connection.release();
+        return resolve(resp);
+      })
+      .catch((err) => {
+        connection.release();
+        return reject(err);
+      });
+    });
   }
 
   public transaction(operation: (connection: any) => Promise<any>): Promise<any> {
@@ -80,10 +95,11 @@ export class Mysql implements DbDefinitions.RDB {
     });
   }
 
-  public query(query: string, params?: Array<any>): Promise<any> {
-    return new Promise((resolve, reject) => {
-
-    });
+  public async query(query: string, params?: Array<any>): Promise<any> {
+    let connection: ExtendedMysqlConnection = await this.getConnectionFromPool();
+    let resp = await connection.queryAsync(query, params);
+    connection.release();
+    return resp;
   }
 
   private getConnectionFromPool(): Promise<ExtendedMysqlConnection> {
