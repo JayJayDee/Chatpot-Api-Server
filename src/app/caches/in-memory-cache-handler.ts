@@ -8,8 +8,16 @@ export class InMemoryCacheHandler implements CacheDefinitions.CacheHandler {
 
   @Inject(ConfigDefinitions.ConfigInjectable)
   private config: ConfigDefinitions.Config; 
-
-  public async doCachedOperation(payload: CacheDefinitions.CachePayload) {
     
+  public async doCached(key: string, expires: number, proc: () => Promise<any>): Promise<any> {
+    return null;
+  }
+
+  public async set(param: CacheDefinitions.SimpleCacheSetParam): Promise<any> {
+    return null;
+  }
+
+  public async get(key: string): Promise<any> {
+    return null;
   }
 }
