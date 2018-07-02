@@ -8,3 +8,9 @@ declare global {
     }
   }
 }
+
+declare module 'koa-router' {
+  interface IRouterContext {
+    sendApiSuccess(payload: any): Promise<any>;
+  }
+}
